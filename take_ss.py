@@ -7,10 +7,6 @@ I WANT TO SAVE THE FRAME WHEN CERTAIN TIME PASSES
 
 
 
-
-
-
-
 import cv2 as cv
 import numpy as np
 import os
@@ -28,37 +24,47 @@ def show_image(image, delay):
     cv.waitKey(delay)
 
 
-player = cv.VideoCapture(vidios_path + 'sample.mp4')
+player = cv.VideoCapture(vidios_path + 'myvideo.mp4')
 
 if not player.isOpened():
     print("vidio is not loaded ")
     exit(0)
 cv.namedWindow('vidio',cv.WINDOW_NORMAL)
-period = 50
+period = 5
 frames = 0
 os.chdir(ss_path)
 print(os.path.abspath(os.getcwd()))
+frame_count = 0
+frames = []
 while 1:
     ret,frame = player.read()
     if ret is False:
         print("failed to capture the frame")
         break
-    # show_image(frame,0.001)
+    frame_count+=1
     period -= 1
     if period == 0:
-        print("now")
-        # print(frame)
-        # cv.imwrite(str(frame)+'.jpg',frame)
-        frames += 1
-        period = 50
+        # black_image = np.zeros((255,255,3),np.uint8)
+
+        # cv.imwrite(str(frame)+'.jpg',black_image)
+        # cv.namedWindow('new_win',cv.WINDOW_NORMAL)
+        # cv.imshow('new_win',frame)
+        print(frame_count)
+        frames.append(frame)
+        period = 5
 
     cv.imshow('vidio',frame)
     if cv.waitKey(fps) & 0xff == ord('q'):
-        print(frames)
         break
 
 # messi = cv.imread(images_path + 'messi5.jpg')
 # cv.imwrite(str(frames)+'.jpg',messi)
+print(len(frames))
+name = 1
+for frame in frames:
+    cv.imwrite(str(name)+'.jpg',frame)
+    name += 1
+
 player.release()
 cv.destroyAllWindows()
 
